@@ -1,0 +1,83 @@
+<html>
+<head>
+    <title>Simple Blockchain Voting</title>
+    <script src="../web3.js"></script>
+    <script src='../jquery-3.4.1.min.js'></script>
+    <script src="./abi.js"></script>
+    <script>
+        let web3 = new Web3(Web3.givenProvider)
+
+        window.addEventListener('load', async () => {
+            if (window.ethereum) {
+                await ethereum.enable()
+                let contract = await getContract()
+                contract.events.VoteFor()
+                    .on('data', (event) => {
+                        console.log(event)
+                        let data = event.returnValues
+                        // console.log('addr: ', data.user)
+                        // console.log('candidate: ', data.candidate)
+                        updateVote(data.candidate)
+                    })
+                    showAllCandidateName()
+                   
+            } else {
+                console.log('Not support browser, please use DApp browser')
+            } 
+        })
+
+        getContract = async () => {
+            let contract = new web3.eth.Contract(abi, contractAddress)
+            return contract
+        }
+
+        getCandidateName = async (index) => {
+            let contract = await getContract()
+            let name = await contract.methods.getCandidateName(index).call()
+            return name;
+        }
+
+        getCandidateVote = async (name) => {
+            let contract = await getContract()
+            let vote = await contract.methods.getVoteFor(name).call() 
+            return vote;
+        }
+
+        showAllCandidateName = async () => {
+            let contract = await getContract()
+            let count = await contract.methods.getCandidateCount().call()
+            
+            for (let i = 0; i < count; i++) {
+                let name = await getCandidateName(i)
+                let vote = await getCandidateVote(name)
+                $('#listCandidate').append("<li> " + name + ": "
+                        +"<span id=\'" + name + "'\>" + vote + "</span>"
+                        +"<button onClick=voteFor(\'"  + name + "\')> + </button>"  
+                        +"</li>")
+            }
+        }
+
+        updateVote = async (name) => {
+            let vote = await getCandidateVote(name)
+            $('#'+name).text(vote)
+        }
+
+        voteFor = async (name) => {
+            let contract = await getContract()
+            console.log('contract: ', contract)
+            let acc = await web3.eth.getAccounts()
+            await contract.methods.voteFor(name).send({
+                from: acc[0]
+            })
+            console.log('vote finish')
+        }
+
+    </script>
+</head>
+
+<body>
+    <h2>Simple Blockchain Voting</h2>
+    <ol id="listCandidate"></ol> 
+</body>
+
+</html>

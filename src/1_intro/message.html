@@ -1,0 +1,49 @@
+<html>
+
+<head>
+    <script src='../web3.js'></script>
+    <script src='../jquery-3.4.1.min.js'></script>
+    <script src='./abi.js'></script>
+</head>
+
+<body>
+    <script>
+        let contract
+        let web3
+
+        window.addEventListener('load', async () => {
+            if (window.ethereum) {
+                await ethereum.enable()
+                web3 = new Web3(Web3.givenProvider)
+                contract = new web3.eth.Contract(abi, contractAddress)
+                let message = await contract.methods.getMessage().call()
+                $('#message').text(message)
+
+                contract.events.showMessage()
+                    .on('data',res => { console.log('data: ',res)})
+            } else {
+                console.log('Non-Ethereum browser detected. You should consider trying MetaMask!')
+            }
+
+        })
+
+        setText = async () => {
+            let mesg = $('#input').val()
+
+            let accounts = await web3.eth.getAccounts();
+            await contract.methods.setMessage(mesg).send({
+                from: accounts[0]
+            })
+
+            $('#message').text(await contract.methods.getMessage().call())
+        }
+    </script>
+
+    Message: <span id='message'></span>
+    <form>
+        <input type="text" id='input' />
+        <button type="button" onclick="setText()">Click</button>
+    </form>
+</body>
+
+</html>
