@@ -25,7 +25,7 @@ contract Vote1 {
         return votesReceived[_candidate];
     }
     
-    // function getCandidateName(uint index) public view returns (string memory) {
-    //     return candidateList[index];
-    // }
+    function getCandidateName(uint index) public view returns (string memory) {
+        return candidateList[index];
+    }
 }

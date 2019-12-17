@@ -9,7 +9,7 @@ Blockchain smart contract and web3js workshop
 ```
 git clone https://github.com/wwarodom/blockchain_ku.git
 npm i -g live-server
-cd blockchain01/src
+cd blockchain_ku/src
 live-server
 ```
 
