@@ -16,5 +16,5 @@ live-server
 Open web browser and go to http://localhost:8080/
 
 ### Credits
-* Vote jQuery verion, ether and wallet examples by ToT (Kulap CTO)
+* Vote jQuery verion, ether and wallet examples by ToT (Kulap CTO) https://github.com/kulapio/EthereumWorkshop
 * Vote NextJS version by Tanakorn Karode
