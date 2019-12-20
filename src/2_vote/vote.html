@@ -49,11 +49,11 @@
             
             for (let i = 0; i < count; i++) {
                 let name = await getCandidateName(i)
-                let vote = await getCandidateVote(name)
-                $('#listCandidate').append("<li> " + name + ": "
-                        +"<span id=\'" + name + "'\>" + vote + "</span>"
-                        +"<button onClick=voteFor(\'"  + name + "\')> + </button>"  
-                        +"</li>")
+                let vote = await getCandidateVote(name) 
+                $('#listCandidate').append(`<li>${name}: `
+                        +`<span id=${name}>${vote}</span>`
+                        +`<button onClick=voteFor(\'${name}\')> + </button>`  
+                        +`</li>`)
             }
         }
 
