@@ -1,0 +1,50 @@
+<html>
+
+<head>
+    <script src="../web3.js"></script>
+    <script src="./abi.js"></script>
+    <script src="../jquery-3.4.1.min.js"></script>
+    <script>
+        var web3
+        var contract
+
+        getMessage = async () => {
+            let message = await contract.methods.getMessage().call()
+            console.log('Message: ', message)
+            $('#message').text(message)
+        }
+
+        setMessage = async () => {
+            let message = $('#input').val()
+            console.log('mesg: ', message)
+            await contract.methods.setMessage(message).send({
+                    from: '0xf3480FE912c9bb8a92c272A8E22F55bfFc89155a'
+            })
+            getMessage()
+        }
+        window.addEventListener('load', async () => {
+            if (window.ethereum) {
+                await ethereum.enable()
+                web3 = new Web3(Web3.givenProvider)
+                contract = new web3.eth.Contract(abi, contractAddress)
+                // console.log('web3: ', web3)
+                // console.log('contract: ',contract)
+                getMessage()                          
+            }
+            else {
+                console.log('not support')
+            }
+
+
+        })
+    </script>
+</head>
+
+<body>
+    <h1>Intro to Blockchain</h1>
+    <span id="message"></span>
+    <input type="text" id="input" />
+    <button onClick='setMessage()'>Change text </button>
+</body>
+
+</html>
