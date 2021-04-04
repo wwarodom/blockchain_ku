@@ -13,7 +13,11 @@
 
         window.addEventListener('load', async () => {
             if (window.ethereum) {
-                await ethereum.enable()
+                // await ethereum.enable()    // <- Deprecate
+                await window.ethereum.request({
+                    method: 'eth_requestAccounts'
+                }); // get permission to access accounts 
+                
                 web3 = new Web3(Web3.givenProvider)
                 contract = new web3.eth.Contract(abi, contractAddress)
                 let message = await contract.methods.getMessage().call()
